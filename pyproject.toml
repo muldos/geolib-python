@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "geolibrary"
-version = "0.2.0"
+version = "0.3.0"
 description = "A modern Python library for geospatial location management with PostgreSQL"
 
 readme = "README.md"
@@ -11,6 +11,7 @@ python = "^3.12"
 sqlalchemy = "^2.0.0"
 click = "^8.0.0"
 psycopg2-binary = "^2.9.0"
+alembic = "^1.13.0"
 
 [tool.poetry.scripts]
 geolib = "geolibrary.cli:main"

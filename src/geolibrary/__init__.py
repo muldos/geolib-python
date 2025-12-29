@@ -15,9 +15,18 @@ except PackageNotFoundError:
     else:
         __version__ = "0.0.0"
 
-from geolibrary.database import get_engine, get_session
+from geolibrary.database import (
+    check_connection,
+    check_tables_exist,
+    create_session,
+    get_engine,
+    get_schema_version,
+    get_session,
+    init_schema_version,
+)
 from geolibrary.models import Location, Photo
 from geolibrary.repository import LocationRepository
+from geolibrary.version import DATAMODEL_VERSION
 
 __all__ = [
     "Location",
@@ -25,5 +34,11 @@ __all__ = [
     "LocationRepository",
     "get_engine",
     "get_session",
+    "create_session",
+    "check_connection",
+    "check_tables_exist",
+    "get_schema_version",
+    "init_schema_version",
+    "DATAMODEL_VERSION",
 ]
 
