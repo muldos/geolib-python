@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "geolibrary"
+version = "0.2.0"
+description = "A modern Python library for geospatial location management with PostgreSQL"
+
+readme = "README.md"
+packages = [{include = "geolibrary", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+sqlalchemy = "^2.0.0"
+click = "^8.0.0"
+psycopg2-binary = "^2.9.0"
+
+[tool.poetry.scripts]
+geolib = "geolibrary.cli:main"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.0"
+pytest-cov = "^4.1.0"
+
+
+
+[[tool.poetry.source]]
+name = "geo-pypi-dev-virtual"
+url = "https://solengeu.jfrog.io/artifactory/api/pypi/geo-pypi-dev-virtual/simple"
+priority = "primary"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
