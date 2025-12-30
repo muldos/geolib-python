@@ -39,6 +39,8 @@ jobs:
       - name: Poetry build
         id: poetry-build
         run: |
+          jf rt bag
+          jf rt bce
           jf poetry-config --repo-resolve=${{ env.PYPI_REPO }}
           jf audit --poetry
           jf poetry install 

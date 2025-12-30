@@ -11,7 +11,7 @@ target-version = ['py312']
 description = 'A modern Python library for geospatial location management with PostgreSQL'
 name = 'geolibrary'
 readme = 'README.md'
-version = "0.4.0"
+version = '0.4.0'
 
 [tool.poetry.dependencies]
 alembic = '^1.13.0'
@@ -32,6 +32,10 @@ include = 'geolibrary'
 
 [tool.poetry.scripts]
 geolib = 'geolibrary.cli:main'
+
+[[tool.poetry.source]]
+name = 'geo-pypi-dev-virtual/simple'
+url = 'https://solengeu.jfrog.io/artifactory/api/pypi/geo-pypi-dev-virtual/simple'
 
 [tool.ruff]
 line-length = 88
