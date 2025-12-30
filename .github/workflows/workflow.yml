@@ -39,12 +39,11 @@ jobs:
       - name: Poetry build
         id: poetry-build
         run: |
-          jf poetry-config --repo-resolve=${{ env.PYPI_REPO }}/simple
+          jf poetry-config --repo-resolve=${{ env.PYPI_REPO }}
           jf poetry install 
           jf poetry build
           jf poetry pytest
       - name: Poetry publish
         id: poetry-publish
         run: |
-          jf poetry-config --repo-resolve=${{ env.PYPI_REPO }}
           jf poetry publish
