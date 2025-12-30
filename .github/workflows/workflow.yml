@@ -40,6 +40,7 @@ jobs:
         id: poetry-build
         run: |
           jf poetry-config --repo-resolve=${{ env.PYPI_REPO }}
+          jf audit --poetry
           jf poetry install 
           jf poetry build
       - name: Poetry publish

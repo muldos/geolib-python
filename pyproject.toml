@@ -11,7 +11,7 @@ target-version = ['py312']
 description = 'A modern Python library for geospatial location management with PostgreSQL'
 name = 'geolibrary'
 readme = 'README.md'
-version = '0.3.0'
+version = "0.4.0"
 
 [tool.poetry.dependencies]
 alembic = '^1.13.0'
