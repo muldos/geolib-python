@@ -24,7 +24,7 @@ Both files will be in the `dist/` directory.
 
 ## Step 2: Configure Publishing Repository
 
-The repository `artifactory-geo-pypi-dev-virtual` should already be configured if you ran `./setup-repo.sh`. If not, configure it:
+The repository `artifactory-geo-pypi-dev-virtual` should already be configured if you followed [README.md](README.md) instructions. 
 
 ```bash
 poetry config repositories.artifactory-geo-pypi-dev-virtual https://solengeu.jfrog.io/artifactory/api/pypi/geo-pypi-dev-virtual

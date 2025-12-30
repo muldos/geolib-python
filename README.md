@@ -17,9 +17,6 @@ A modern Python library for geospatial location management with PostgreSQL, feat
 This project uses the `artifactory-geo-pypi-dev-virtual` repository definition to publish (without /simple at the end) and the `geo-pypi-dev-virtual` repository definition to resolve. The `pyproject.toml` doesn't contains any credentials.
 
 
-
-This configures the repository for both fetching and publishing. The script modifies `pyproject.toml` locally - this change should NOT be committed.
-
 **Manual setup:**
 ```bash
 # For fetching dependencies (modifies pyproject.toml locally)
@@ -30,8 +27,6 @@ poetry config http-basic.geo-pypi-dev-virtual <username> <password>
 poetry config repositories.artifactory-geo-pypi-dev-virtual https://solengeu.jfrog.io/artifactory/api/pypi/geo-pypi-dev-virtual
 poetry config http-basic.artifactory-geo-pypi-dev-virtual <username> <password>
 ```
-
-See [SETUP.md](SETUP.md) for detailed setup instructions.
 
 ### Install Dependencies
 
@@ -57,7 +52,9 @@ DB_PASSWORD=password
 DB_NAME=geolibrary
 ```
 
-## Usage
+## CLI Usage
+
+The CLI is implemented using the [click](https://click.palletsprojects.com/en/stable/) framework.
 
 ### Initialize Database
 
@@ -111,8 +108,9 @@ Quick publish commands:
 poetry build
 poetry publish --repository artifactory-geo-pypi-dev-virtual --dist-dir ./dist
 ```
+## Launch unit tests
 
-## License
-
-MIT
+```bash
+poetry run pytest
+```
 
