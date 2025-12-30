@@ -39,7 +39,6 @@ jobs:
       - name: Poetry build
         id: poetry-build
         run: |
-          rm poetry.lock
           jf poetry install 
           jf poetry build
       - name: Poetry publish
