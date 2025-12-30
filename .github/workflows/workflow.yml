@@ -1,0 +1,49 @@
+name: "geosite-lib"
+on: 
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: write
+  # required for all workflows
+  security-events: write
+  actions: read 
+  packages: write  
+jobs:
+  geosite-lib:
+    runs-on: ubuntu-latest
+    env:
+      PYPI_REPO: 'geo-pypi-dev-virtual'
+      JF_URL: https://${{ vars.JF_HOST }}/
+      JF_PROJECT: ${{ vars.JF_PROJECT_KEY }}
+    steps:  
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      - name: Setup JFrog CLI
+        id: setup-cli
+        uses: jfrog/setup-jfrog-cli@v4
+        env:
+          JF_URL: https://${{ vars.JF_HOST }}/
+          JF_PROJECT: ${{ vars.JF_PROJECT_KEY }}
+        with:
+            oidc-provider-name: davidro-github-integration
+            oidc-audience: davidro-github
+      - name: Checkout the repository    
+        uses: actions/checkout@v4  
+      - name: Poetry build
+        id: poetry-build
+        run: |
+          rm poetry.lock
+          jf poetry install 
+          jf poetry build
+      - name: Poetry publish
+        id: poetry-publish
+        run: |
+          jf poetry-config --repo-resolve=${{ vars.PYPI_REPO }} 
+          jf poetry publish
