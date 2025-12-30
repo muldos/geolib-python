@@ -33,10 +33,6 @@ include = 'geolibrary'
 [tool.poetry.scripts]
 geolib = 'geolibrary.cli:main'
 
-[[tool.poetry.source]]
-name = 'geo-pypi-dev-virtual/simple'
-url = 'https://solengeu.jfrog.io/artifactory/api/pypi/geo-pypi-dev-virtual/simple'
-
 [tool.ruff]
 line-length = 88
 target-version = 'py312'
