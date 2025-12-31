@@ -44,11 +44,6 @@ jobs:
           jf poetry-config --repo-resolve=${{ env.PYPI_REPO }}
           jf poetry install 
           jf poetry build 
-          jf audit --poetry
-      - name: Poetry publish
-        id: poetry-publish
-        run: |
           jf poetry publish -r geo-pypi-dev-virtual  
           jf rt bp
           jf rt bs
-          
