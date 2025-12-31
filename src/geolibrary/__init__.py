@@ -20,9 +20,7 @@ from geolibrary.database import (
     check_tables_exist,
     create_session,
     get_engine,
-    get_schema_version,
     get_session,
-    init_schema_version,
 )
 from geolibrary.models import Location, Photo
 from geolibrary.repository import LocationRepository
@@ -37,8 +35,6 @@ __all__ = [
     "create_session",
     "check_connection",
     "check_tables_exist",
-    "get_schema_version",
-    "init_schema_version",
     "DATAMODEL_VERSION",
 ]
 

@@ -2,11 +2,13 @@
 
 import sys
 from importlib.metadata import version
+from pathlib import Path
 
 import click
+from alembic import command
+from alembic.config import Config
 
-from geolibrary.database import get_engine
-from geolibrary.models import Base
+from geolibrary.config import get_database_config
 from geolibrary.repository import LocationRepository
 
 
@@ -17,12 +19,38 @@ def main() -> None:
     pass
 
 
+def get_alembic_config() -> Config:
+    """Get Alembic configuration for geolibrary migrations."""
+    # Find the project root (where alembic.ini is located)
+    # This file is in geosite-lib/src/geolibrary/cli.py
+    # So we need to go up 3 levels to get to geosite-lib/
+    current_file = Path(__file__)
+    project_root = current_file.parent.parent.parent
+    alembic_ini_path = project_root / "alembic.ini"
+    
+    if not alembic_ini_path.exists():
+        raise FileNotFoundError(
+            f"Could not find alembic.ini at {alembic_ini_path}. "
+            "Make sure you're running this from the geosite-lib project directory."
+        )
+    
+    alembic_cfg = Config(str(alembic_ini_path))
+    alembic_cfg.set_main_option("script_location", str(project_root / "alembic"))
+    
+    # Set database URL from config
+    db_config = get_database_config()
+    alembic_cfg.set_main_option("sqlalchemy.url", db_config.to_url())
+    
+    return alembic_cfg
+
+
 @main.command()
 def init_db() -> None:
-    """Initialize the database tables."""
+    """Initialize the database tables using Alembic migrations."""
     try:
-        engine = get_engine()
-        Base.metadata.create_all(bind=engine)
+        alembic_cfg = get_alembic_config()
+        click.echo("Running Alembic migrations...")
+        command.upgrade(alembic_cfg, "head")
         click.echo("Database initialized successfully.")
     except Exception as e:
         click.echo(f"Error initializing database: {e}", err=True)

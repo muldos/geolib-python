@@ -44,22 +44,9 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
 
-    # Create schema_version table
-    op.create_table(
-        "schema_version",
-        sa.Column("id", sa.Integer(), nullable=False),
-        sa.Column("version", sa.String(length=50), nullable=False),
-        sa.Column("applied_at", sa.DateTime(), server_default=sa.text("CURRENT_TIMESTAMP"), nullable=True),
-        sa.PrimaryKeyConstraint("id"),
-    )
-
-    # Insert initial version
-    op.execute("INSERT INTO schema_version (version) VALUES ('1.0.0')")
-
 
 def downgrade() -> None:
     op.drop_table("photos")
     op.drop_index(op.f("ix_locations_name"), table_name="locations")
     op.drop_table("locations")
-    op.drop_table("schema_version")
 

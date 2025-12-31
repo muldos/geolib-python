@@ -14,12 +14,38 @@ _SessionLocal: sessionmaker[Session] | None = None
 
 
 def get_engine() -> Engine:
-    """Get or create the database engine."""
+    """Get or create the database engine.
+    
+    Configures connection pool with:
+    - pool_size: Number of connections to maintain (default: 5)
+    - max_overflow: Additional connections beyond pool_size (default: 10)
+    - pool_pre_ping: Test connections before using (prevents stale connections)
+    - pool_recycle: Recycle connections after this many seconds (default: 3600)
+    - pool_timeout: Seconds to wait for connection from pool (default: 30)
+    """
     global _engine
     if _engine is None:
         config = get_database_config()
         database_url = config.to_url()
-        _engine = create_engine(database_url, echo=False)
+        
+        # Configure connection pool settings
+        # Both schemas (public and geoiam) share the same pool since they're in the same database
+        _engine = create_engine(
+            database_url,
+            echo=False,
+            pool_size=5,  # Number of connections to maintain
+            max_overflow=10,  # Additional connections beyond pool_size
+            pool_pre_ping=True,  # Test connections before using (prevents stale connections)
+            pool_recycle=3600,  # Recycle connections after 1 hour
+            pool_timeout=30,  # Wait up to 30 seconds for a connection from the pool
+            connect_args={
+                "connect_timeout": 10,  # Connection timeout in seconds
+            }
+        )
+        logger.info(
+            f"Database engine created with pool_size=5, max_overflow=10, "
+            f"pool_pre_ping=True, pool_recycle=3600"
+        )
     return _engine
 
 
@@ -87,77 +113,5 @@ def check_tables_exist(table_names: list[str] | None = None) -> bool:
         return False
     except Exception as e:
         logger.error(f"Unexpected error checking tables: {e}")
-        return False
-
-
-def get_schema_version() -> str | None:
-    """Get the current schema version from the database.
-
-    Returns:
-        Schema version string or None if version table doesn't exist
-    """
-    try:
-        engine = get_engine()
-        inspector = inspect(engine)
-
-        # Check if schema_version table exists
-        if "schema_version" not in inspector.get_table_names():
-            return None
-
-        with engine.connect() as conn:
-            result = conn.execute(
-                text("SELECT version FROM schema_version ORDER BY id DESC LIMIT 1")
-            )
-            row = result.fetchone()
-            return row[0] if row else None
-    except SQLAlchemyError as e:
-        logger.error(f"Error getting schema version: {e}")
-        return None
-    except Exception as e:
-        logger.error(f"Unexpected error getting schema version: {e}")
-        return None
-
-
-def init_schema_version(version: str) -> bool:
-    """Initialize schema version table with the given version.
-
-    Args:
-        version: Version string to store
-
-    Returns:
-        True if successful, False otherwise
-    """
-    try:
-        engine = get_engine()
-        inspector = inspect(engine)
-
-        # Create schema_version table if it doesn't exist
-        if "schema_version" not in inspector.get_table_names():
-            with engine.begin() as conn:
-                conn.execute(
-                    text(
-                        """
-                        CREATE TABLE schema_version (
-                            id SERIAL PRIMARY KEY,
-                            version VARCHAR(50) NOT NULL,
-                            applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                        )
-                        """
-                    )
-                )
-
-        # Insert version
-        with engine.begin() as conn:
-            conn.execute(
-                text("INSERT INTO schema_version (version) VALUES (:version)"),
-                {"version": version},
-            )
-
-        return True
-    except SQLAlchemyError as e:
-        logger.error(f"Error initializing schema version: {e}")
-        return False
-    except Exception as e:
-        logger.error(f"Unexpected error initializing schema version: {e}")
         return False
 
