@@ -42,9 +42,10 @@ jobs:
           jf rt bag
           jf rt bce
           jf poetry-config --repo-resolve=${{ env.PYPI_REPO }}
-          jf audit --poetry
+          
           jf poetry install --build-name=${{ env.JFROG_CLI_BUILD_NAME }} --build-number=${{ env.JFROG_CLI_BUILD_NUMBER }}  --project=${{ env.JFROG_CLI_BUILD_PROJECT }}
-          jf poetry build
+          jf poetry build --build-name=${{ env.JFROG_CLI_BUILD_NAME }} --build-number=${{ env.JFROG_CLI_BUILD_NUMBER }}  --project=${{ env.JFROG_CLI_BUILD_PROJECT }}
+          jf audit --poetry
       - name: Poetry publish
         id: poetry-publish
         run: |
