@@ -49,4 +49,4 @@ jobs:
       - name: Poetry publish
         id: poetry-publish
         run: |
-          jf poetry publish --build-name=${{ env.JFROG_CLI_BUILD_NAME }} --build-number=${{ env.JFROG_CLI_BUILD_NUMBER }}  --project=${{ env.JFROG_CLI_BUILD_PROJECT }}
+          jf poetry publish --dist-dir ./dist  --build-name=${{ env.JFROG_CLI_BUILD_NAME }} --build-number=${{ env.JFROG_CLI_BUILD_NUMBER }}  --project=${{ env.JFROG_CLI_BUILD_PROJECT }}
