@@ -52,6 +52,6 @@ jobs:
           poetry source add geo-pypi-dev-virtual ${{ env.JF_URL }}/artifactory/api/pypi/${{ env.PYPI_REPO}}/simple
           poetry install
           poetry build
-          poetry publish --repository artifactory-geo-pypi-dev-virtual --dist-dir ./dist
+          jf poetry publish --repository artifactory-geo-pypi-dev-virtual --dist-dir ./dist
           jf rt bp
           jf rt bs
