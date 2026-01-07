@@ -42,16 +42,19 @@ jobs:
         env:
           JF_URL: https://${{ vars.JF_HOST }}/
           JF_PROJECT: ${{ vars.JF_PROJECT_KEY }}
-          JFROG_RUN_NATIVE: true
+          #JFROG_RUN_NATIVE: true
         run: |
           jf rt bag
           jf rt bce
-          poetry config repositories.artifactory-geo-pypi-dev-virtual ${{ env.JF_URL }}/artifactory/api/pypi/${{ env.PYPI_REPO}}
-          poetry config http-basic.artifactory-geo-pypi-dev-virtual ${{ steps.setup-cli.outputs.oidc-user }} ${{ steps.setup-cli.outputs.oidc-token }}
-          poetry config http-basic.geo-pypi-dev-virtual ${{ steps.setup-cli.outputs.oidc-user }} ${{ steps.setup-cli.outputs.oidc-token }}
-          poetry source add geo-pypi-dev-virtual ${{ env.JF_URL }}/artifactory/api/pypi/${{ env.PYPI_REPO}}/simple
-          poetry install
-          poetry build
-          poetry publish --repository artifactory-geo-pypi-dev-virtual --dist-dir ./dist
+          jf poc --repo-resolve ${{ env.PYPI_REPO}}
+          jf poetry install
+          #poetry config repositories.artifactory-geo-pypi-dev-virtual ${{ env.JF_URL }}/artifactory/api/pypi/${{ env.PYPI_REPO}}
+          #poetry config http-basic.artifactory-geo-pypi-dev-virtual ${{ steps.setup-cli.outputs.oidc-user }} ${{ steps.setup-cli.outputs.oidc-token }}
+          #poetry config http-basic.geo-pypi-dev-virtual ${{ steps.setup-cli.outputs.oidc-user }} ${{ steps.setup-cli.outputs.oidc-token }}
+          #poetry source add geo-pypi-dev-virtual ${{ env.JF_URL }}/artifactory/api/pypi/${{ env.PYPI_REPO}}/simple
+          #poetry install
+          #poetry build
+          #poetry publish --repository artifactory-geo-pypi-dev-virtual --dist-dir ./dist
+          jf poetry publish --repo ${{ env.PYPI_REPO}} --project ${{ env.JF_PROJECT}}
           jf rt bp
           jf rt bs
