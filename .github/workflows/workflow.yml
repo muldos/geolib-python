@@ -15,6 +15,7 @@ jobs:
       PYPI_REPO: 'geo-pypi-dev-virtual'
       JF_URL: https://${{ vars.JF_HOST }}/
       JF_PROJECT: ${{ vars.JF_PROJECT_KEY }}
+      JF_CLI_BUILD_PROJECT: ${{ vars.JF_PROJECT_KEY }}
     steps:  
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -31,7 +32,7 @@ jobs:
         env:
           JF_URL: https://${{ vars.JF_HOST }}/
           JF_PROJECT: ${{ vars.JF_PROJECT_KEY }}
-          JFROG_RUN_NATIVE: true
+          #JFROG_RUN_NATIVE: true
         with:
             oidc-provider-name: davidro-github-integration
             oidc-audience: davidro-github
