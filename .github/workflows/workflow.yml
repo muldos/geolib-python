@@ -52,8 +52,6 @@ jobs:
           poetry config http-basic.artifactory-geo-pypi-dev-virtual ${{ steps.setup-cli.outputs.oidc-user }} ${{ steps.setup-cli.outputs.oidc-token }}
           poetry config http-basic.geo-pypi-dev-virtual ${{ steps.setup-cli.outputs.oidc-user }} ${{ steps.setup-cli.outputs.oidc-token }}
           poetry source add geo-pypi-dev-virtual ${{ env.JF_URL }}/artifactory/api/pypi/${{ env.PYPI_REPO}}/simple
-          jf poetry install --build-name=geosite-lib --build-number=${{ github.run_number }}
-          jf poetry build --build-name=geosite-lib --build-number=${{ github.run_number }}
-          jf poetry publish --repository artifactory-geo-pypi-dev-virtual --dist-dir ./dist --build-name=geosite-lib --build-number=${{ github.run_number }}
-          jf rt bp  geosite-lib ${{ github.run_number }}
-          jf rt bs  geosite-lib ${{ github.run_number }}
+          poetry install
+          poetry build 
+          poetry publish --repository artifactory-geo-pypi-dev-virtual --dist-dir ./dist 
