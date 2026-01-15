@@ -57,5 +57,5 @@ jobs:
           #poetry build
           #poetry publish --repository artifactory-geo-pypi-dev-virtual --dist-dir ./dist
           jf poetry publish --repo ${{ env.PYPI_REPO}} --project ${{ env.JF_PROJECT}} --build-name=geosite-lib --build-number=${{ github.run_number }}
-          jf rt bp --build-name=geosite-lib --build-number=${{ github.run_number }}
-          jf rt bs --build-name=geosite-lib --build-number=${{ github.run_number }}
+          jf rt bp  geosite-lib ${{ github.run_number }}
+          jf rt bs  geosite-lib ${{ github.run_number }}
